@@ -43,6 +43,24 @@ public class Huffman {
 		return pq.poll();
 	}
 
+	public void printHuffmanTree() {
+		printHuffmanTree(head, "");
+	}
+
+	// For debbuging, prints the tree with frequencies and codes
+	public void printHuffmanTree(HuffmanNode node, String code) {
+		if (node == null)
+			return;
+
+		if (node.getLeft() == null && node.getRight() == null) {
+			System.out.println(node.getCharacter() + " : " + code + " : " + node.getFrequency());
+			return;
+		}
+
+		printHuffmanTree(node.getLeft(), code + "0");
+		printHuffmanTree(node.getRight(), code + "1");
+	}
+
 	public String encode(String message) {
 		int[] frequencyTable = calculateFrequency(message);
 		head = buildHuffmanTree(frequencyTable);
@@ -60,6 +78,7 @@ public class Huffman {
 		if (node == null)
 			return;
 
+		// Stores the codes in maps for better access
 		if (node.getLeft() == null && node.getRight() == null) {
 			encHuffmanCodeMap.put(node.getCharacter(), code);
 			decHuffmanCodeMap.put(code, node.getCharacter());
