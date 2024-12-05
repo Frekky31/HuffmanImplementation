@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +25,8 @@ public class Huffman {
 	}
 
 	public static HuffmanNode buildHuffmanTree(int[] frequencyTable) {
+		// Use of priority queue which "sorts" the nodes based on frequency,
+		// starting from the lowest
 		PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
 		for (int i = 0; i < frequencyTable.length; i++) {
 			if (frequencyTable[i] > 0) {
@@ -54,6 +55,7 @@ public class Huffman {
 		return sb.toString();
 	}
 
+	// Recursively traverse the huffman tree to generate the codes
 	public void generateHuffmanCodes(HuffmanNode node, String code) {
 		if (node == null)
 			return;
@@ -69,18 +71,14 @@ public class Huffman {
 	}
 
 	public String decode(String encodedMessage) {
+		// Go through all bits, if a code is found in the map, append the character
 		StringBuilder sb = new StringBuilder();
-		HuffmanNode current = head;
+		StringBuilder temp = new StringBuilder();
 		for (int i = 0; i < encodedMessage.length(); i++) {
-			if (encodedMessage.charAt(i) == '1') {
-				current = current.getRight();
-			} else {
-				current = current.getLeft();
-			}
-
-			if (current.getLeft() == null && current.getRight() == null) {
-				sb.append(current.getCharacter());
-				current = head;
+			temp.append(encodedMessage.charAt(i));
+			if (decHuffmanCodeMap.containsKey(temp.toString())) {
+				sb.append(decHuffmanCodeMap.get(temp.toString()));
+				temp = new StringBuilder();
 			}
 		}
 		return sb.toString();
@@ -158,19 +156,6 @@ public class Huffman {
 
 		// Remove padding
 		int lastIndex = bitString.lastIndexOf("1");
-		bitString = new StringBuilder(bitString.substring(0, lastIndex));
-
-		// Go through all bits, if a code is found in the map, append the character
-		StringBuilder sb = new StringBuilder();
-		StringBuilder temp = new StringBuilder();
-		for (int i = 0; i < bitString.length(); i++) {
-			temp.append(bitString.charAt(i));
-			if (decHuffmanCodeMap.containsKey(temp.toString())) {
-				sb.append(decHuffmanCodeMap.get(temp.toString()));
-				temp = new StringBuilder();
-			}
-		}
-
-		return sb.toString();
+		return decode(bitString.substring(0, lastIndex));
 	}
 }
