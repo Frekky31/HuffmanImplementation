@@ -17,7 +17,7 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
 
 	@Override
 	public int compareTo(HuffmanNode other) {
-		return frequency - other.frequency;
+		return Integer.compare(frequency, other.frequency);
 	}
 
 	public char getCharacter() {

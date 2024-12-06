@@ -6,8 +6,9 @@ public class App {
         System.out.println();
 
         Huffman huffman = new Huffman();
-        String message = "this is a test message for huffman encoding and decoding";
+        String message = "this is a test message for huffman encoding and decoding, with a lot of aaaaaaaaaaaas";
         huffman.encodeToFile(message, "output.dat", "dec_tab.txt");
+        huffman.printHuffmanTree();
         System.out.println(huffman.decodeFromFile("output.dat", "dec_tab.txt"));
     }
 }

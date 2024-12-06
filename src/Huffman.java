@@ -53,7 +53,7 @@ public class Huffman {
 			return;
 
 		if (node.getLeft() == null && node.getRight() == null) {
-			System.out.println(node.getCharacter() + " : " + code + " : " + node.getFrequency());
+			System.out.println(node.getCharacter() + " " + node.getFrequency() + " " + code);
 			return;
 		}
 
@@ -64,7 +64,7 @@ public class Huffman {
 	public String encode(String message) {
 		int[] frequencyTable = calculateFrequency(message);
 		head = buildHuffmanTree(frequencyTable);
-		generateHuffmanCodes(head, "");
+		generateMap(head, "");
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < message.length(); i++) {
@@ -74,7 +74,7 @@ public class Huffman {
 	}
 
 	// Recursively traverse the huffman tree to generate the codes
-	public void generateHuffmanCodes(HuffmanNode node, String code) {
+	public void generateMap(HuffmanNode node, String code) {
 		if (node == null)
 			return;
 
@@ -85,8 +85,8 @@ public class Huffman {
 			return;
 		}
 
-		generateHuffmanCodes(node.getLeft(), code + "0");
-		generateHuffmanCodes(node.getRight(), code + "1");
+		generateMap(node.getLeft(), code + "0");
+		generateMap(node.getRight(), code + "1");
 	}
 
 	public String decode(String encodedMessage) {
